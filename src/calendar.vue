@@ -32,7 +32,7 @@ export default {
     defaultDay: { type: Number, default: () => null },
     defaultMonth: { type: Number, default: () => null },
     defaultYear: { type: Number, default: () => null },
-    defaultDisabled: { type: Array, default: () => null }
+    defaultDisabled: { type: Array, default: () => [] }
   },
   data() {
     return {
@@ -123,7 +123,7 @@ export default {
       );
     },
     isDisabled: function(date) {
-      return this.disabledDays.includes(this.getFullDate(date));
+      return this.disabledDays && this.disabledDays.includes(this.getFullDate(date));
     }
   }
 };
