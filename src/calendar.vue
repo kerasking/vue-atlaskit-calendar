@@ -79,7 +79,7 @@ export default {
       return this.defaultDay ? this.defaultDay : this.today.get("date");
     },
     initialMonth: function() {
-      return this.defaultMonth ? this.defaultMonth : this.today.get("MMMM");
+      return this.defaultMonth ? this.defaultMonth : this.today.format("M");
     },
     initialYear: function() {
       return this.defaultYear ? this.defaultYear : this.today.get("Y");
