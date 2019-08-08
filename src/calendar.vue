@@ -36,8 +36,8 @@ export default {
   },
   data() {
     return {
-      today: moment(),
-      dateContext: moment(),
+      today: moment(new Date()),
+      dateContext: moment(new Date()),
       days: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
       daysInMonth: {}
     };
@@ -85,7 +85,7 @@ export default {
       return this.defaultDay ? this.defaultDay : this.today.get("date");
     },
     initialMonth: function() {
-      return this.defaultMonth ? this.defaultMonth : this.today && this.today.month() +1;
+      return this.defaultMonth ? this.defaultMonth : this.today && this.today.month() +1 || this.month;
     },
     initialYear: function() {
       return this.defaultYear ? this.defaultYear : this.today.get("Y");
