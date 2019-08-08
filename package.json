@@ -1,6 +1,6 @@
 {
   "name": "vue-atlaskit-calendar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/calendar.umd.js",
   "module": "dist/calendar.esm.js",
   "unpkg": "dist/calendar.min.js",
