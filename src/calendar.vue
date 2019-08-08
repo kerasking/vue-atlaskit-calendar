@@ -85,7 +85,7 @@ export default {
       return this.defaultDay ? this.defaultDay : this.today.get("date");
     },
     initialMonth: function() {
-      return this.defaultMonth ? this.defaultMonth : 1+ this.today.month();
+      return this.defaultMonth ? this.defaultMonth : this.today && this.today.month() +1;
     },
     initialYear: function() {
       return this.defaultYear ? this.defaultYear : this.today.get("Y");
@@ -104,8 +104,8 @@ export default {
     dayClass: function(date) {
       var dayClass = "calendar__day ";
       if (date.clicked) dayClass = dayClass + "selected__day";
-      if (this.isCurrentDay(date.date)) dayClass = dayClass + "current__day";
-      if (this.isDisabled(date.date)) dayClass = dayClass + "disabled__day";
+      if (this.today && this.isCurrentDay(date.date)) dayClass = dayClass + "current__day";
+      if (this.today && this.isDisabled(date.date)) dayClass = dayClass + "disabled__day";
       return dayClass;
     },
     getFullDate: function(date) {
