@@ -85,7 +85,7 @@ export default {
       return this.defaultDay ? this.defaultDay : this.today.get("date");
     },
     initialMonth: function() {
-      return this.defaultMonth ? this.defaultMonth : this.today.format("M");
+      return this.defaultMonth ? this.defaultMonth : 1+ this.today.month();
     },
     initialYear: function() {
       return this.defaultYear ? this.defaultYear : this.today.get("Y");
