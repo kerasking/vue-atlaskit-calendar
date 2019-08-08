@@ -42,7 +42,7 @@ export default {
       daysInMonth: {}
     };
   },
-  created() {
+  mounted() {
     var newDate = `${this.initialYear}-${this.initialMonth}-${
       this.initialDate
     }`;
