@@ -11,12 +11,12 @@
     <ul class="calendar__days">
       <li class="calendar__day" v-for="(blank, i) in firstDayOfMonth" :key="'before'+i">&nbsp;</li>
       <li
-        v-for="(date, i) in daysInMonth"
+        v-for="(day, i) in daysInMonth"
         :key="i"
-        :class="dayClass(date)"
-        @click.capture.stop="onSelectDate(date)"
+        :class="dayClass(day)"
+        @click.capture.stop="onSelectDate(day)"
       >
-        <span>{{date}}</span>
+        <span>{{day.date}}</span>
       </li>
       <li class="calendar__day" v-for="(blank, i) in lastDayOfMonth" :key="'after' + i ">&nbsp;</li>
     </ul>
@@ -38,7 +38,8 @@ export default {
     return {
       today: moment(),
       dateContext: moment(),
-      days: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+      days: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+      daysInMonth: {}
     };
   },
   created() {
@@ -46,6 +47,14 @@ export default {
       this.initialDate
     }`;
     this.dateContext = moment(new Date(newDate), "YYYY-MM-DD");
+    this.daysInMonth = new Array(this.dateContext.daysInMonth())
+      .fill()
+      .map((date, i) => ({ date: i + 1, clicked: false }));
+  },
+  watch: {
+    daysInMonth(newDate) {
+      this.dayClass(newDate);
+    }
   },
   computed: {
     year: function() {
@@ -56,9 +65,6 @@ export default {
     },
     monthName: function() {
       return this.dateContext.format("MMMM");
-    },
-    daysInMonth: function() {
-      return this.dateContext.daysInMonth();
     },
     currentDate: function() {
       return this.dateContext.get("date");
@@ -97,8 +103,9 @@ export default {
   methods: {
     dayClass: function(date) {
       var dayClass = "calendar__day ";
-      if (this.isCurrentDay(date)) dayClass = dayClass + "current__day";
-      if (this.isDisabled(date)) dayClass = dayClass + "disabled__day";
+      if (date.clicked) dayClass = dayClass + "selected__day";
+      if (this.isCurrentDay(date.date)) dayClass = dayClass + "current__day";
+      if (this.isDisabled(date.date)) dayClass = dayClass + "disabled__day";
       return dayClass;
     },
     getFullDate: function(date) {
@@ -106,13 +113,22 @@ export default {
         "YYYY-MM-DD"
       );
     },
-    onSelectDate: function(date) {
-      this.$emit("on-select", this.getFullDate(date));
+    onSelectDate: function(day) {
+      this.daysInMonth.map(date => {
+        if (date.date == day.date) {
+          day.clicked = !day.clicked;
+        } else {
+          date.clicked = false;
+        }
+      });
+      this.$emit("on-select", this.getFullDate(day.date));
     },
     addMonth: function() {
+      this.daysInMonth.map(date => (date.clicked = false));
       this.dateContext = moment(this.dateContext).add(1, "month");
     },
     subtractMonth: function() {
+      this.daysInMonth.map(date => (date.clicked = false));
       this.dateContext = moment(this.dateContext).subtract(1, "month");
     },
     isCurrentDay: function(date) {
@@ -123,7 +139,9 @@ export default {
       );
     },
     isDisabled: function(date) {
-      return this.disabledDays && this.disabledDays.includes(this.getFullDate(date));
+      return (
+        this.disabledDays && this.disabledDays.includes(this.getFullDate(date))
+      );
     }
   }
 };
@@ -200,8 +218,15 @@ export default {
   border-radius: 3px;
   padding: 4px 9px;
 }
-.day:hover {
+.calendar__day:hover {
   background-color: rgb(244, 245, 247);
+}
+.calendar__day:active {
+  background-color: rgb(244, 245, 247);
+}
+.selected__day {
+  background-color: rgb(66, 82, 110);
+  color: rgb(255, 255, 255);
 }
 .current__day {
   color: rgb(0, 82, 204);
