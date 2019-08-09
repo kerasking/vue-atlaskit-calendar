@@ -2,7 +2,7 @@
 
 ## Project setup
 ```
-npm innpm i vue-atlaskit-calendarstall
+npm i vue-atlaskit-calendarstall
 ```
 ## Demo 
 https://habibagadalla.github.io/holidays-russia/
