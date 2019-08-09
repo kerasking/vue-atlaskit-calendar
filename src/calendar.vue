@@ -36,20 +36,19 @@ export default {
   },
   data() {
     return {
-      today: moment(new Date()),
-      dateContext: moment(new Date()),
+      today: moment(),
+      dateContext: moment(),
       days: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
       daysInMonth: {}
     };
   },
-  mounted() {
+  created() {
     var newDate = `${this.initialYear}-${this.initialMonth}-${
       this.initialDate
     }`;
-    this.dateContext = moment(new Date(newDate), "YYYY-MM-DD");
-    this.daysInMonth = new Array(this.dateContext.daysInMonth())
-      .fill()
-      .map((date, i) => ({ date: i + 1, clicked: false }));
+    this.dateContext = moment(newDate, "YYYY-MM-DD");
+    var totalDaysInMonth = this.dateContext && this.dateContext.daysInMonth(); 
+    this.daysInMonth = totalDaysInMonth > 0 && new Array(totalDaysInMonth).fill().map((date, i) => ({ date: i + 1, clicked: false }));
   },
   watch: {
     daysInMonth(newDate) {
@@ -85,7 +84,7 @@ export default {
       return this.defaultDay ? this.defaultDay : this.today.get("date");
     },
     initialMonth: function() {
-      return this.defaultMonth ? this.defaultMonth : this.today && this.today.month() +1 || this.month;
+      return this.defaultMonth ? this.defaultMonth : this.today.month()+1 || this.month;
     },
     initialYear: function() {
       return this.defaultYear ? this.defaultYear : this.today.get("Y");
@@ -104,8 +103,8 @@ export default {
     dayClass: function(date) {
       var dayClass = "calendar__day ";
       if (date.clicked) dayClass = dayClass + "selected__day";
-      if (this.today && this.isCurrentDay(date.date)) dayClass = dayClass + "current__day";
-      if (this.today && this.isDisabled(date.date)) dayClass = dayClass + "disabled__day";
+      if (this.isCurrentDay(date.date)) dayClass = dayClass + "current__day";
+      if (this.isDisabled(date.date)) dayClass = dayClass + "disabled__day";
       return dayClass;
     },
     getFullDate: function(date) {
